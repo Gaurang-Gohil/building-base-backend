@@ -19,19 +19,19 @@ const server = http.createServer((req, res) =>{
     switch(req.url) {
         case "/": {
             res.writeHead(200, {"Content-Type" : "application/json"});
-            res.end(JSON.stringify({ message: "ok", route: "home" }));
+            res.end(JSON.stringify({ message: "ok", detail: "home" }));
             break;
         }
 
         case "/about": {
             res.writeHead(200, {"Content-Type" : "application/json"});
-            res.end(JSON.stringify({ message: "ok", route: "about" }));
+            res.end(JSON.stringify({ message: "ok", detail: "about" }));
             break;
         }
 
         default: {
             res.writeHead(404, {"Content-Type" : "application/json"});
-            res.end(JSON.stringify({ message: "ERROR", route: "Not Found" }));
+            res.end(JSON.stringify({ message: "ERROR", detail: "Not Found" }));
             break;
         }
     }
