@@ -22,9 +22,22 @@ const server = http.createServer((req, res) => {
                     res.writeHead(400, { "Content-Type": "application/json" });
                     res.end(JSON.stringify({ error: "Malformed JSON", detail: err.message }));
                 }
-            } else {
+            }
+            
+            else if(contentType && contentType.includes("application/x-www-form-urlencoded")){
+                try{
+                    const parsed = Object.fromEntries(new URLSearchParams(body));
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({received: parsed}));
+                } catch (err){
+                    res.writeHead(400, {"Content-Type" : "application/x-www-form-urlencoded"});
+                    res.end(JSON.stringify({error: "Not a form value", detail: err.message}));
+                }
+            }
+            
+            else {
                 res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(body);
+                res.end(JSON.stringify(body));
             }
         });
 
@@ -39,6 +52,7 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({ message: "ERROR", detail: "Not Found" }));
     }
 
+    
 })
 
 const PORT = 3000;

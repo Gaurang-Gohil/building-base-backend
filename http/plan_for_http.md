@@ -94,5 +94,3 @@
   5. Write a simple load test with Promise.all firing 50 concurrent requests                                                                                                                                 
                                                                                                                                                                                                              
   Final exercise: Remove all your routing code and rewrite it from memory in 15 minutes.                                                                                                                     
-                                                                                                                                                                                                             
-  
