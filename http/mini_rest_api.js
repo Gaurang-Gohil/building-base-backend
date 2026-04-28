@@ -36,7 +36,7 @@ const httpServer = http.createServer(async (req, res) => {
                 send(200, { notes: notes })
             }
             else if (pathname.startsWith("/notes/")) {
-                const note = notes[id];
+                const note = notes.find(n => n.id === Number(id));
                 if (note === undefined) {
                     send(404, { error: "Note not found" });
                 }
@@ -52,14 +52,12 @@ const httpServer = http.createServer(async (req, res) => {
 
             if (pathname === "/notes") {
                 try {
-                    notes.push(noteToAdd);
-                    send(201, { message: "note added successfully" })
+                    const newNote = { id: nextId++, ...noteToAdd };
+                    notes.push(newNote);
+                    send(201, { note: newNote });
                 } catch (err) {
                     send(400, { error: "Could not add the note" });
                 }
-            }
-            else if (pathname.startsWith("/notes/") && id) {
-                notes[id] = noteToAdd;
             }
         }
 
@@ -81,8 +79,13 @@ const httpServer = http.createServer(async (req, res) => {
             const noteToEdit = await readBody();
             if (pathname.startsWith("/notes/")) {
                 try {
-                    notes[id] = noteToEdit;
-                    send(200, { message: "note updated successfully"})
+                    const idx = notes.findIndex(n => n.id === Number(id));
+                    if (idx === -1) {
+                        send(404, { error: "Note not found" });
+                    } else {
+                        notes[idx] = { id: Number(id), ...noteToEdit };
+                        send(200, { note: notes[idx] });
+                    }
                 } catch (err) {
                     send(400, { error: err });
                 }
